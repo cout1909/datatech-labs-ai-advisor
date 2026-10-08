@@ -4,7 +4,7 @@ Run on 8 October 2026 using the existing project `.venv` (Python 3.12.10), Node 
 
 | Check | Actual result |
 | --- | --- |
-| Backend pytest | **31 passed**, including input/schema checks, provider failure/retry behavior, real semantic retrieval, SQL writes/reads, persistence, isolation, and CORS |
+| Backend pytest | **32 passed**, including input/schema checks, provider failure/retry behavior, real semantic retrieval, SQL writes/reads, persistence, isolation, and CORS |
 | Frontend production build | **Passed**; 1,582 modules transformed, approximately 250.5 kB JS before gzip |
 | Browser suite | **6 passed**; form/examples, loading/errors, mobile layout, help, copying, history, and live integration |
 | Live browser integration | **Three real Groq analyses passed**, rendered successfully and saved to SQL; saved history reopened; no browser console/page errors |
@@ -27,8 +27,22 @@ Port 8000 was occupied by an unrelated application. This project was tested on *
 
 The running local API measured about **156.7 MiB resident memory** after live browser tests; an earlier cold smoke process measured about 241 MiB. These are Windows measurements, not a substitute for Render container validation. Configuration uses one worker, one embedding thread, a quantized local model, a tiny index, and a free Render plan.
 
-Docker engine was not running locally, so a local Docker image build has not been verified. Cloud deployment and URL checks are recorded here only after completion. SQLite is persistent locally but ephemeral on Render's free filesystem.
+Docker engine was not running locally, but Render successfully built and ran the Docker image. The public Vercel frontend and Render backend were verified, including actual cross-origin browser requests. SQLite is persistent locally but ephemeral on Render's free filesystem.
 
-GitHub publishing and Vercel/Render free-plan deployment have been authorized by the owner for `cout1909/datatech-labs-ai-advisor`; authentication and remote verification are in progress.
+## Verified public deployment
+
+- Repository: https://github.com/cout1909/datatech-labs-ai-advisor
+- Frontend: https://datatech-labs-ai-advisor.vercel.app
+- Backend: https://datatech-labs-ai-project-advisor-api.onrender.com
+- Health and Swagger: `/health` and `/docs` on the backend returned success.
+- GitHub CI: https://github.com/cout1909/datatech-labs-ai-advisor/actions/runs/37797402587 completed successfully for the deployed application revision.
+- The public frontend completed three real analyses, displayed semantic source references, reopened SQL history, fit a 390px mobile viewport, and produced no browser console/page errors in the smoke run.
+- Backend CORS permits the exact production frontend origin. The frontend build has the real Render URL.
+- Vercel account plan: **Hobby**. Render compute plan: **free**, one instance, no paid disk.
+- Render memory samples during verification reached **309,551,100 bytes (about 295 MiB)** against a reported **536,870,900-byte limit (512 MiB)**. This validates the observed demo workload, not arbitrary load.
+- The workspace has another free Render service; monthly free instance hours are shared. Cold starts, quotas, and ephemeral SQLite remain limitations.
+- A committed-tree check covered all 45 tracked files: no actual `.env` files, model caches, databases, or configured Groq key were committed. Only safe `.env.example` templates are tracked.
+
+Groq occasionally rejected a generated structured response with a 400. The application now retries a provider-reported JSON validation failure once, within the existing two-attempt limit, and logs only a sanitized error code. The additional regression test passed. The final hosted browser and API checks succeeded.
 
 The exact interviewing company has not been confirmed. The corpus intentionally contains labeled general engineering references, not unverified company-service claims.

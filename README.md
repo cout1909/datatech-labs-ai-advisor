@@ -4,6 +4,16 @@
 
 Independent demonstration project. Not affiliated with or endorsed by DataTech Labs.
 
+## Live application
+
+- Frontend: [datatech-labs-ai-advisor.vercel.app](https://datatech-labs-ai-advisor.vercel.app)
+- Backend: [Render API](https://datatech-labs-ai-project-advisor-api.onrender.com)
+- Health: [GET /health](https://datatech-labs-ai-project-advisor-api.onrender.com/health)
+- Swagger: [API documentation](https://datatech-labs-ai-project-advisor-api.onrender.com/docs)
+- Repository: [cout1909/datatech-labs-ai-advisor](https://github.com/cout1909/datatech-labs-ai-advisor)
+
+Verified on 8 October 2026: three real examples from the public frontend, cross-origin API calls, semantic retrieval, SQL history, mobile layout, and browser console checks. Hosting plans were confirmed as Vercel Hobby and Render free. Free-hosted history is ephemeral and the backend can sleep when idle.
+
 A full-stack internship portfolio application: describe a business challenge, retrieve relevant engineering references, generate a structured AI proposal, and revisit it in SQL-backed history. The exact interviewing organization has not been confirmed, so the current corpus contains **general engineering references**, not company-service claims. See [KNOWLEDGE_BASE.md](KNOWLEDGE_BASE.md).
 
 ## Features and stack
@@ -137,7 +147,7 @@ Provider unit tests are mocked. The separate vector test uses the real model/ind
 
 ## Deployment
 
-**No public deployment is claimed until URLs are verified.** GitHub push and account deployment require owner authorization and authentication.
+**The links above were deployed with owner authorization and verified.** The following describes setup/redeployment; do not create duplicate resources for the existing live app. Current Render auto-deploy is off, and the Vercel deployment was uploaded from the reviewed source snapshot. Future source changes require explicit redeployment (or connecting Git-based deployment in the dashboards).
 
 1. Review files and create/select a GitHub repository, preferably `datatech-labs-ai-project-advisor`. Push only after authorization. Secrets, databases, model caches, dependencies, and generated artifacts are ignored.
 2. In Render, create a Blueprint from `render.yaml`: free Docker backend, one worker, build-time model download/indexing, `/health`. Set GROQ_API_KEY securely and CORS_ORIGINS to the eventual Vercel origin. DATABASE_URL uses `/app/storage/advisor.db`.
