@@ -122,6 +122,17 @@ def test_provider_timeout_no_retry():
         asyncio.run(llm_service.generate('problem', None, [], client=client))
     assert invoke.await_count == 1
 
+def test_provider_json_validation_failure_retries_once(recommendation):
+    import httpx
+    from groq import BadRequestError
+    response = httpx.Response(400, request=httpx.Request('POST', 'https://api.groq.com/openai/v1/chat/completions'))
+    error = BadRequestError('Private provider output', response=response, body={'error': {'code': 'json_validate_failed'}})
+    client = MagicMock()
+    invoke = AsyncMock(side_effect=[error, recommendation])
+    client.with_structured_output.return_value.ainvoke = invoke
+    assert asyncio.run(llm_service.generate('problem', None, [], client=client)) == recommendation
+    assert invoke.await_count == 2
+
 @pytest.mark.parametrize('model,method', [('openai/gpt-oss-20b', 'json_schema'), ('another-json-model', 'json_mode')])
 def test_output_mode_matches_model(monkeypatch, recommendation, model, method):
     monkeypatch.setattr(settings, 'groq_model', model)

@@ -1,6 +1,8 @@
 import asyncio
 import json
 import logging
+import re
+from groq import BadRequestError
 from langchain_core.exceptions import OutputParserException
 from langchain_core.messages import HumanMessage, SystemMessage
 from langchain_groq import ChatGroq
@@ -53,6 +55,16 @@ async def generate(problem, industry, documents, client=None):
         try:
             result = await asyncio.wait_for(structured.ainvoke(messages), timeout=28)
             return Recommendation.model_validate(result)
+        except BadRequestError as exc:
+            body = exc.body if isinstance(exc.body, dict) else {}
+            error = body.get('error', body)
+            code = error.get('code', '') if isinstance(error, dict) else ''
+            safe_code = re.sub(r'[^a-zA-Z0-9_-]', '', str(code))[:60]
+            logger.warning('Provider rejected output (code=%s, attempt=%s)', safe_code or 'unknown', attempt + 1)
+            if code in ('json_validate_failed', 'json_schema_validation_failed') and attempt == 0:
+                messages.append(HumanMessage(content='Return a concise JSON response that strictly matches the supplied schema.'))
+                continue
+            raise AIUnavailable('The AI provider rejected the structured response. Please try again shortly.') from None
         except (ValidationError, OutputParserException, ValueError) as exc:
             logger.warning('Output validation failed (attempt %s, %s)', attempt + 1, type(exc).__name__)
             if attempt == 0:
