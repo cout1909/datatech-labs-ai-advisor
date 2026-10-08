@@ -1,0 +1,9 @@
+fastapi>=0.115,<1
+uvicorn[standard]>=0.34,<1
+pydantic-settings>=2.7,<3
+langchain-groq>=0.3,<2
+langchain-text-splitters>=0.3,<2
+fastembed>=0.6,<1
+faiss-cpu>=1.10,<2
+numpy>=1.26,<3
+SQLAlchemy>=2.0,<3

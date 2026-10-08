@@ -1,0 +1,6 @@
+[
+ {"id":"knowledge","title":"Find knowledge faster","category":"Knowledge management","business_problem":"Our employees spend hours searching thousands of internal documents and HR policies. We need a reliable way to find answers with references.","industry":"IT Services"},
+ {"id":"support","title":"Support every customer","category":"Customer experience","business_problem":"Our retail customer support team repeatedly answers the same product and return-policy questions. We want faster responses with escalation to a human.","industry":"Retail"},
+ {"id":"documents","title":"Put documents to work","category":"Document intelligence","business_problem":"Our finance team manually extracts information from scanned invoices. We need document text extraction, validation, and human review before payment.","industry":"Finance"},
+ {"id":"reporting","title":"Connect your workflows","category":"Business operations","business_problem":"Our managers manually combine weekly reports from several systems. We need business reporting and workflow automation with reviewed, traceable insights.","industry":"Manufacturing"}
+]
